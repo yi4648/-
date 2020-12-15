@@ -161,28 +161,44 @@ $('#add-close').click(function () {
 $('.close').click(function () {
     $('#add-modal').css('display', 'none');
 })
-
+// 性别选择
+function gd(t){
+    t.setAttribute('checked','true')
+}
+var aGender = $('input[name="gender"]')
 // 添加用户提交表单
 $("#add-confirm").click(function () {
     let uno = $('#account').val();
+    if(uno == ""){
+        return;
+    }
     //表单验证账号为11位
     let reg = /^1\d{10}$/ ;
     if(uno!=""&&!reg.test(uno)){
         alert('只能输入11位数字！！！');
-        return ;
+        return;
     }
 
     let password = $('#password').val();
+    if(password == ""){
+        return;
+    }
     let regp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$/;
     if(password!=""&&!regp.test(password)){
         alert("密码由6到15位的 数字与字母 组成")
         return;
     }
     let uname = $('#addUame').val();
-    $("input[name='sex']").click(function(){
-        let usex = $(this).val()
-        console.log($(this).val())
-    })
+    if(uname == ""){
+        alert("姓名不能为空")
+        return;
+    }
+    let usex;
+    for(var a of aGender){
+        if(a.checked){
+            usex = a.getAttribute('value')
+        }
+    }
     let data = {
         "uno": uno,
         "password": password,
@@ -202,9 +218,8 @@ $("#add-confirm").click(function () {
                   getUserList()
                 // console.log(res.msg)
                 alert('添加成功');
-                $('#account').val("");
-                $('#password').val("");
-                $('#addUame').val("");
+                $("#userForm-a")[0].reset()
+                $("input:radio[name='gender']:checked").removeAttr("checked")
             }
         },
         error: function () {
@@ -260,9 +275,9 @@ function modUserList(no) {
                       </p>
                       <p><label  for="x-username">姓名：</label><input type="text" name="dd" id="x-username" class="gen" value="${user.uname}"></p>
                       <p class="sex">
-                          <label for="gender">性别：
-                              <input type="radio" name="gender"  value="男" onclick="gd(this)"/>男
-                              <input type="radio" name="gender" value="女" onclick="gd(this)"/>女
+                          <label>性别：
+                              <input type="radio" name="gender-m"  value="男" onclick="gd(this)"/>男
+                              <input type="radio" name="gender-m" value="女" onclick="gd(this)"/>女
                           </label>
                       </p>
                       <p>
@@ -272,6 +287,7 @@ function modUserList(no) {
                   </form></div>`
                 $("#mod-modal").html(html2);
                 $("#mod-modal").css("display", "block")
+                $('input[name="gender-m"]').val([user.usex])
                 $('#mod-del').click(function () {
                     $('#mod-modal').css('display', 'none');
                 })

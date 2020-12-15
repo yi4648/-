@@ -69,16 +69,17 @@
                           <h4 class="modal-title">添加用户</h4>
                         </div>
                         <div class="modal-body">
-                            <form name="a" >
+                            <form name="a" id="userForm-a">
                                 <p><label for="account">账号：</label><input type="tel" name="uno" id="account" class="gen" placeholder="请输入要添加的账号" ></p>
                                 <p><label for="password">密码：</label><input type="password" name="pwd" id="password" class="gen" placeholder="请输入密码">
                                     <!-- <span id="error1" class="error1">密码安全系数过低！</span> -->
                                 </p>
                                 <p><label  for="addUame">姓名：</label><input type="text" name="uname" id="addUame" class="gen" minlength="1" placeholder="最小长度为1"></p>
                                 <p class="sex">
-                                    <lable >性别：</lable>
-                                    <input type="radio" name="gender" id="male"  value="男"/>男
-                                    <input type="radio" name="gender" id="female" value="女"/>女
+                                    <lable for="gender">性别：
+                                        <input type="radio" name="gender" id="male"  value="男" onclick="gd(this)"/>男
+                                        <input type="radio" name="gender" id="female" value="女" onclick="gd(this)"/>女
+                                    </lable>
                                 </p>
                                 <p>
                                     <button type="button" class="btn btn-default" id="add-confirm">确定</button>
@@ -122,7 +123,7 @@
                           <h4 class="book-title">图书添加</h4>
                         </div>
                         <div class="book-body">
-                            <form name="a">
+                            <form name="a" id="bookForm-a">
                                 <p><label for="bookName-a">书名：</label><input type="text" name="uno" id="bookName-a" class="gan" placeholder="请输入书名"></p>
                                 <p><label  for="bookPub-a">出版社：</label><input type="text" name="uname" id="bookPub-a" class="gan" placeholder="请输入出版社"></p>
                                 <p class="gen">
