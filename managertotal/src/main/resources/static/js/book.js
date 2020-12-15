@@ -142,6 +142,10 @@ $('.close2').click(function(){
 })
 // 图书录入提交表单
 // $("#bookType-a").val("");
+// $('#bookType-a').change(function(){
+//     let bookType = $("#bookType-a").val()
+var a = $('#bookType-a')[0].options;
+// console.log(a)
 $("#book-confirm-a").click(function(){
     let bookName = $('#bookName-a').val();
     if(bookName ===  ""){
@@ -158,17 +162,23 @@ $("#book-confirm-a").click(function(){
         alert("数量不能小于0")
         return;
     }
-    // let bookType = $()
+    let bookType;
+    for(var i=0;i<a.length;i++){
+        if(a[i].selected){
+            bookType  = a[i].value;
+        }
+    }
+    // let bookType = $(":selected")
     // let
     let data={
         "bookName": bookName,
         "bookPub": bookPub,
         "count":count,
         // 多选框取值
-        // "bookType": bookType
+        "bookType": bookType
     }
 
-    console.log(data)
+    // console.log(data)
     $.ajax({
         method: 'POST',
         url: 'http://localhost:8181/manager/book/save',
@@ -191,6 +201,7 @@ $("#book-confirm-a").click(function(){
         }
     })
 })
+// })
 
 
 //删除的点击事件
