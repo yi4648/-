@@ -275,6 +275,7 @@ function modBookList(id) {
                     $('#bookmod-modal').css('display', 'none');
                 })
                 // 提交验证表单
+                var  b = $('#bookType-m')[0].options;
                 $("#book-confirm-m").click(function () {
                     // console.log(1)
                     let bookName = $('#bookName-m').val();
@@ -292,13 +293,19 @@ function modBookList(id) {
                         alert("数量不能小于0")
                         return;
                     }
-
+                    let bookType;
+                    for(var i=0;i<b.length;i++){
+                        if(b[i].selected){
+                            bookType  = b[i].value;
+                        }
+                    }
 
                     let data = {
                         "id":id,
                         "bookName": bookName,
                         "bookPub": bookPub,
-                        "count": count
+                        "count": count,
+                        "bookType":bookType
                     };
                     // console.log(data);
                     // console.log(JSON.stringify(data));
@@ -311,7 +318,7 @@ function modBookList(id) {
                         success: function (res) {
                             if (res.msg == "success") {
                                 $('#bookmod-modal').css('display', 'none');
-                                getBookList(noPageBook, pageSize, bookName,bookPub);
+                                getBookList(noPageBook, pageSize);
                                 alert("修改成功",res.msg);
                             } else {
                                 alert(res.msg)
