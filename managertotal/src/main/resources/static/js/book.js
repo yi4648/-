@@ -1,7 +1,8 @@
 // var dataList = null;
 var noPageBook= null;
 var pageSize = null;
-var queryName = null;
+var bookName = null;
+var bookPub = null;
 // getBookList()
 //根据输入的当前页码，和页的数据大小，和查询参数获取数据
 
@@ -27,9 +28,10 @@ function getBookList(pageNo, pageSize, bookName,bookPub) {
                 // // console.log(noPageBook);
                 pageSize = res.page.pageSize;
                 dataList = res.page.list;
+
                 if (res.page.list == "") {
                     $("#pageNum2").val("1");
-                    alert("查询错误");
+                    alert("查询的书目不存在");
                     getBookList();
                 }
                 // console.log(res);
@@ -103,7 +105,7 @@ $("#prev2").click(function () {
     }
     // console.log(pageNum);
     $("#pageNum2").val(pageNum);
-    getBookList(pageNum, pageSize, queryName);
+    getBookList(pageNum, pageSize, );
 });
 // 下一页的点击事件
 $("#next2").click(function () {
@@ -116,7 +118,7 @@ $("#next2").click(function () {
     }
     // console.log(pageNum);
     $("#pageNum2").val(pageNum);
-    getBookList(pageNum, pageSize, queryName);
+    getBookList(pageNum, pageSize, bookName, bookPub);
 });
 
 // 查询事件
@@ -127,8 +129,7 @@ $('#book-search').click(function () {
     getBookList(1,pageSize,bookName,bookPub);
 })
 
-let bookType = $("#bookType-a").val();
-console.log(bookType)
+
 // 图书录入按钮监听，实现弹出和关闭功能
 $('#add-book').click(function(){
     $('#bookadd-modal').css('display','block');
@@ -140,57 +141,54 @@ $('.close2').click(function(){
     $('#bookadd-modal').css('display','none');
 })
 // 图书录入提交表单
-$("#bookType-a").change(function(){
-    let bookType = $("#bookType-a").val()
-    $("#book-confirm-a").click(function(){
-        let bookName = $('#bookName-a').val();
-        if(bookName ===  ""){
-            alert("书名不能为空！")
-            return;
-        }
-        let bookPub = $('#bookPub-a').val();
-        if(bookPub === ""){
-            alert("出版社不能为空")
-            return;
-        }
-        let count = $('#count-a').val();
-        if(count<0){
-            alert("数量不能小于0")
-            return;
-        }
-        console.log(bookType)
+// $("#bookType-a").val("");
+$("#book-confirm-a").click(function(){
+    let bookName = $('#bookName-a').val();
+    if(bookName ===  ""){
+        alert("书名不能为空！")
+        return;
+    }
+    let bookPub = $('#bookPub-a').val();
+    if(bookPub === ""){
+        alert("出版社不能为空")
+        return;
+    }
+    let count = $('#count-a').val();
+    if(count<0){
+        alert("数量不能小于0")
+        return;
+    }
+    // let bookType = $()
+    // let
+    let data={
+        "bookName": bookName,
+        "bookPub": bookPub,
+        "count":count,
         // 多选框取值
-        // bookType = $("#bookType-a").val;
-        // let bookType = $()
-        // let
-        let data={
-            "bookName": bookName,
-            "bookPub": bookPub,
-            "count":count,
-            // 多选框取值
-            "bookType": bookType
-        }
-        console.log(data)
-        $.ajax({
-            method: 'POST',
-            url: 'http://localhost:8181/manager/book/save',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(res) {
-                if(res.msg =="success"){
-                    $('#bookadd-modal').css('display','none');
-                    // 查看进行添加之后是否进行重新渲染
-                    getBookList();
-                    alert('添加成功');
-                    $("#bookForm-a")[0].reset();
-                    $("#bookType-a").val("")
-                }
-            },
-            error: function () {
-                alert("添加失败");
+        // "bookType": bookType
+    }
+
+    console.log(data)
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:8181/manager/book/save',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(res) {
+            if(res.msg =="success"){
+                alert('添加成功');
+                $('#bookadd-modal').css('display','none');
+                // 查看进行添加之后是否进行重新渲染
+                getBookList();
+                // alert('添加成功');
+                $("#bookForm-a")[0].reset();
+                // $("#bookType-a").removeAttribute("selected")
             }
-        })
+        },
+        error: function () {
+            alert("添加失败");
+        }
     })
 })
 
@@ -208,7 +206,7 @@ function delBookList(id) {
             success: function (res) {
                 if (res) {
                     // 重新渲染当前页面的值
-                    getBookList(1, pageSize, queryName);
+                    getBookList(1, pageSize, bookName,bookPub);
                 }
             }
         });
@@ -302,7 +300,7 @@ function modBookList(id) {
                         success: function (res) {
                             if (res.msg == "success") {
                                 $('#bookmod-modal').css('display', 'none');
-                                getBookList(noPageBook, pageSize, queryName);
+                                getBookList(noPageBook, pageSize, bookName,bookPub);
                                 alert("修改成功",res.msg);
                             } else {
                                 alert(res.msg)

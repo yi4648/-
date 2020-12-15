@@ -1,7 +1,7 @@
 var dataList = null;
 var noPage = null;
 var pageSize = null;
-var queryName = null;
+var searchName = null;
 //在页面刷新的第一次就执行获取数据
 getUserList();
 //根据输入的当前页码，和页的数据大小，和查询参数获取数据
@@ -26,8 +26,10 @@ function getUserList(pageNo, pageSize, searchName) {
                 dataList = res.page.list;
                 // queryName = queryParam;
                 //判断查询页数是否超过总页数
-                if (res.page.list == "") {
-                    console.log(1)
+                if(searchName != ""){
+                    console.log(typeof(searchName))
+                }
+                if (res.page.list == ""&&typeof(searchName)=="string") {
                     $("#pageNum").val("1");
                     alert("查询错误");
                     getUserList();
@@ -120,7 +122,7 @@ $("#prev").click(function () {
     }
     // console.log(pageNum);
     $("#pageNum").val(pageNum);
-    getUserList(pageNum, pageSize, queryName);
+    getUserList(pageNum, pageSize, searchName);
 });
 // 下一页的点击事件
 $("#next").click(function () {
@@ -133,7 +135,7 @@ $("#next").click(function () {
     }
     // console.log(pageNum);
     $("#pageNum").val(pageNum);
-    getUserList(pageNum, pageSize, queryName);
+    getUserList(pageNum, pageSize, searchName);
 });
 
 
@@ -214,10 +216,10 @@ $("#add-confirm").click(function () {
         success: function (res) {
             if (res.msg == "success") {
                 $('#add-modal').css('display', 'none');
-                // getUserList(noPage, pageSize, queryName);
+                // getUserList(noPage, pageSize, searchName);
                   getUserList()
                 // console.log(res.msg)
-                alert('添加成功');
+                // alert('添加成功');
                 $("#userForm-a")[0].reset()
                 $("input:radio[name='gender']:checked").removeAttr("checked")
             }
@@ -246,7 +248,7 @@ function delUserList(no) {
             contentType: 'application/x-www-form-urlencoded',
             success: function (res) {
                 if (res) {
-                    getUserList(noPage, pageSize, queryName);
+                    getUserList(noPage, pageSize, searchName);
                 }
             }
         });
@@ -334,7 +336,7 @@ function modUserList(no) {
                             console.log(res)
                             if (res.msg == "success") {
                                 $('#mod-modal').css('display', 'none');
-                                getUserList(noPage, pageSize, queryName);
+                                getUserList(noPage, pageSize, searchName);
                                 alert("修改成功",res.msg);
                             } else {
                                 alert(res.msg)
